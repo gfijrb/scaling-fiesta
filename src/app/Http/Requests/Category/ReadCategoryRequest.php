@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Http\Request;
+use Illuminate\Foundation\Http\FormRequest;
 
-class ApiBaseRequest extends Request
+class ReadCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class ApiBaseRequest extends Request
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -27,15 +27,4 @@ class ApiBaseRequest extends Request
             //
         ];
     }
-
-    public function expectsJson()
-    {
-        return true;
-    }
-
-    public function wantsJson()
-    {
-        return true;
-    }
-
 }
