@@ -37,7 +37,7 @@ class ProductController extends Controller
             if ((int) $exception->getCode() === 23000) {
                 return response()->json(['error' => 'Mysql error: duplicate value'], 409);
             } else {
-                return response()->json(['error' => 'Mysql error'], $exception->getCode());
+                return response()->json(['error' => $exception->getMessage()], $exception->getCode());
             }
         }
 
@@ -53,7 +53,12 @@ class ProductController extends Controller
         try {
             $result = $this->repository->read($request);
         } catch (\Exception $exception) {
-            return response()->json(['error' => 'Mysql error'], $exception->getCode());
+            return response()->json([
+                'error' => $exception->getMessage(),
+                //'trace' => $exception->getTrace(),
+                ],
+                ($exception->getCode() >= 200) ? $exception->getCode() : 404
+            );
         }
 
         return response()->json(['result' => $result], 201);

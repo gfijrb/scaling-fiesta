@@ -25,6 +25,13 @@ require __DIR__.'/../vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
+| Load custom helper methods
+|--------------------------------------------------------------------------
+*/
+require dirname(__DIR__).'/app/helper.php';
+
+/*
+|--------------------------------------------------------------------------
 | Turn On The Lights
 |--------------------------------------------------------------------------
 |
@@ -52,7 +59,7 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
 $response = $kernel->handle(
-    $request = \App\Http\Requests\ApiBaseRequest::capture()
+    $request = \Illuminate\Http\Request::capture()
 );
 
 $response->send();
