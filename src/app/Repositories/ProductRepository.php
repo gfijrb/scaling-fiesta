@@ -101,9 +101,7 @@ class ProductRepository extends Repository
         if ($paginate) {
             $query->paginate($paginate);
         }
-
-        var_dump($query->toSql());
-
+        
         return ReadProduct::collection(
             $query->get()
         );
