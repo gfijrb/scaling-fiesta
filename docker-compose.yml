@@ -47,7 +47,7 @@ services:
     container_name: scaling-fiesta-nginx
     restart: unless-stopped
     ports:
-      - 8001:80
+      - 8000:80
     volumes:
       - ./src/:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d
