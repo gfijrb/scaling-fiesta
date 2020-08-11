@@ -4,17 +4,12 @@ namespace App\Repositories;
 
 use App\Category;
 use App\Contracts\RepositoryContract;
-use App\Http\Resources\CreateCategory;
-use App\Http\Resources\DeleteCategory;
-use App\Http\Resources\ReadCategory;
-use App\Http\Resources\UpdateCategory;
-use App\Product;
+use App\Http\Resources\Category\UpdateCategory;
+use App\Http\Resources\Category\CreateCategory;
+use App\Http\Resources\Category\DeleteCategory;
+use App\Http\Resources\Category\ReadCategory;
 use App\ProductCategory;
-use Illuminate\Database\QueryException;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use phpDocumentor\Reflection\Types\Collection;
 
 class CategoryRepository extends Repository implements RepositoryContract
 {

@@ -2,20 +2,19 @@
 
 namespace App\Repositories;
 
-use App\Http\Requests\UpdateProductRequest;
-use App\Http\Resources\CreateProduct;
-use App\Http\Resources\DeleteProduct;
-use App\Http\Resources\ReadProduct;
+use App\Http\Resources\Product\CreateProduct;
+use App\Http\Resources\Product\DeleteProduct;
+use App\Http\Resources\Product\ReadProduct;
+use App\Http\Resources\Product\UpdateProduct;
 use App\Product;
 use App\Contracts\RepositoryContract;
 use App\ProductCategory;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use ErrorException;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class ProductRepository extends Repository
+class ProductRepository extends Repository implements RepositoryContract
 {
     const DEF_PRICE_FROM = 0.01;
 
@@ -27,11 +26,15 @@ class ProductRepository extends Repository
     {
         $product = new Product();
         $productCategery = new ProductCategory();
-
         $result = false;
-
         try {
-            DB::transaction(function() use($request, $product, $productCategery, &$id){
+            DB::transaction(function() use(
+                $request,
+                $product,
+                $productCategery,
+                $result,
+                &$id
+            ) {
                 $id = DB::table($product->getTable())->insertGetId(
                     [
                         'title' => $request->title,
@@ -61,9 +64,7 @@ class ProductRepository extends Repository
                 $result = DB::table($productCategery->getTable())->insert($genresInsert);
             });
         } catch (QueryException $queryException) {
-            $jsonResponse = response()->json(['errors' => $queryException->getMessage()], 422);
-
-            throw new HttpResponseException($jsonResponse);
+            throw new \ErrorException($queryException->getMessage(), 422);
         }
 
         return CreateProduct::collection($result);
@@ -71,7 +72,6 @@ class ProductRepository extends Repository
 
     public function read(Request $request)
     {
-
         $searchTerm = $request->get('q', null);
         $paginate = $request->get('pag', 200);
         $priceFrom = $request->get('price_from', self::DEF_PRICE_FROM);
@@ -102,8 +102,6 @@ class ProductRepository extends Repository
             $query->paginate($paginate);
         }
 
-        var_dump($query->toSql());
-
         return ReadProduct::collection(
             $query->get()
         );
@@ -111,8 +109,7 @@ class ProductRepository extends Repository
 
     public function update(Request $request)
     {
-        //return collect($request->all());
-        return UpdateProductRequest::collection(
+        return UpdateProduct::collection(
             Product::query()
                 ->findOrFail($request->input('id'))
                 ->update([

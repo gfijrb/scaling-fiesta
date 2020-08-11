@@ -4,7 +4,7 @@ namespace App\Http\Resources\Product;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class EditProduct extends JsonResource
+class UpdateProduct extends JsonResource
 {
     /**
      * Transform the resource into an array.
